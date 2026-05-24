@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('/fonts/orbitron-bold-latin.woff2') format('woff2');
+}
+
 :root {
   --default-border-color: var(--gray-200);
 }
@@ -144,6 +152,70 @@ body:has([data-product-guide-index]) #sidebar a.nav-anchor[href='/'] svg {
 }
 
 img.nav-logo {
-  max-width: 220px;
+  max-width: 36px;
   height: auto;
+}
+
+/* Navbar primary CTA — Scape teal accent */
+#navbar a[href="https://scape.exchange"],
+header a[href="https://scape.exchange"],
+a.navbar-primary-button,
+.navbar-cta {
+  background-color: #00AB9B !important;
+  border-color: #00AB9B !important;
+  color: #000 !important;
+}
+
+#navbar a[href="https://scape.exchange"]:hover,
+header a[href="https://scape.exchange"]:hover,
+a.navbar-primary-button:hover,
+.navbar-cta:hover {
+  background-color: #00796A !important;
+  border-color: #00796A !important;
+  color: #ffffff !important;
+}
+
+/* ============================================================
+   Fonts: Raleway sitewide, Orbitron for the SCAPE wordmark
+   (Google Fonts @import is at the top of this file — required
+   by CSS spec, must precede all other rules)
+   ============================================================ */
+
+html,
+body,
+button,
+input,
+textarea,
+select {
+  font-family: 'Raleway', system-ui, -apple-system, sans-serif !important;
+}
+
+/* "SCAPE" wordmark injected next to the logo image. Targets the
+   logo's parent link via :has(); covers a few wrapper variants
+   in case Mintlify renames the container class. */
+a:has(> img.nav-logo)::after,
+a:has(img.nav-logo)::after,
+.nav-logo-container::after {
+  content: 'SCAPE';
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 700 !important;
+  color: #000000;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  margin-left: 0.6rem;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.dark a:has(> img.nav-logo)::after,
+.dark a:has(img.nav-logo)::after,
+.dark .nav-logo-container::after {
+  color: #ffffff;
+}
+
+/* Make sure the logo link is a flex row so the icon + text align */
+a:has(> img.nav-logo),
+a:has(img.nav-logo) {
+  display: inline-flex !important;
+  align-items: center;
 }
