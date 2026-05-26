@@ -4,4 +4,59 @@ sidebarTitle: Scape Architecture
 description: High-level overview of Scape's system architecture.
 ---
 
-Document Scape's architecture here.
+## Overview
+
+Scape is a HIP-3 deployer on [Hyperliquid](https://hyperliquid.xyz). It operates perpetual
+markets on Chinese metals — gold, silver, and copper.
+
+The oracle is CNY-quoted and derived from [Shanghai Metals Market](https://www.metal.com) (SMM)
+composite feeds. Margin and settlement are in USDC. There is no CNY/USD conversion at any
+point — exposure is quanto.
+
+See [Commodities](/assets/commodities) for the full contract specifications.
+
+## Division of Responsibility
+
+Hyperliquid runs matching, margining, funding, and liquidation. Scape sets the oracle,
+market parameters, and market-maker economics.
+
+| Layer | Operator | Function |
+| --- | --- | --- |
+| Assessment | SMM | CNY composite spot, 500ms cadence |
+| Relay | SEDA Protocol | Validated push to Hyperliquid every 3s, no FX conversion |
+| Execution | Hyperliquid (HyperCore) | Mark, funding, liquidation, USDC settlement |
+
+## HIP-3
+
+[HIP-3](https://hyperliquid.gitbook.io/hyperliquid-docs) (Hyperliquid Improvement Proposal 3)
+allows independent developers to deploy and operate custom perpetual markets on Hyperliquid.
+A deployer defines its own market listings, oracle sources, and risk parameters while relying
+on Hyperliquid's matching engine, clearinghouse, and validator set for execution and
+settlement.
+
+Scape's matching, order types, funding, liquidations, and auto-deleveraging are managed by
+HyperCore. Three components are bespoke to Scape — the **oracle price**, the **mark price**,
+and the **external price** — computed by the relayer and broadcast to HyperCore. See
+[Market Mechanics](/market-mechanics/overview) for details.
+
+## The Scape Interface
+
+[scape.exchange](https://scape.exchange) is an interface for accessing Scape markets. It is
+not the exclusive means of access — because Scape markets live on Hyperliquid, they can be
+reached through any compatible interface or directly on-chain.
+
+## HIP-3 Metadata
+
+| Metadata Field | Details |
+| --- | --- |
+| Name | `scape` |
+| Full Name | `SCAPE` |
+| Markets | `SHAG`, `SHAU`, `SHCU` |
+| Deployer | `0x0000000000000000000000000000000000000000` |
+| Oracle Updater | `0x0000000000000000000000000000000000000000` |
+| Deployer Stake | 500,000 HYPE, slashable on misconduct via stake-weighted validator vote |
+
+<Note>
+  The deployer and oracle updater addresses above are placeholders. Replace them with Scape's
+  on-chain HIP-3 deployment addresses before publishing.
+</Note>

@@ -4,4 +4,32 @@ sidebarTitle: Margin Modes
 description: Available margin modes and how they work.
 ---
 
-Document margin modes here.
+Scape inherits its margining from HyperCore. All three markets — SHAG, SHAU, and SHCU — are
+**isolated margin only**. Collateral is confined to a single position, so a loss in one market
+cannot cascade into another.
+
+## Initial Margin and Leverage
+
+Leverage can be set to any integer from 1 up to the market maximum. Per-market maximums are
+listed under [Commodities](/assets/commodities). The margin required to open a position is:
+
+$$
+\text{initial margin} = \frac{\text{position size} \times \text{mark price}}{\text{leverage}}
+$$
+
+Leverage is checked only when opening a position. Afterward, the trader is responsible for
+monitoring leverage usage to avoid liquidation. Margin can be added or removed post-open, and
+unrealized P&L counts as additional margin.
+
+## Maintenance Margin
+
+The maintenance margin is the minimum collateral needed to avoid
+[liquidation](/risk-and-margining/liquidation-mechanics). When account equity (collateral plus
+P&L) falls below it, the position is liquidated. Maintenance margin is half the initial margin
+at the market's maximum leverage.
+
+## Position Limits
+
+Each market caps the position any one account can hold as a fraction of its open-interest cap.
+The limit graduates with market-maker tier — see Scape's Market Maker Specification for the
+schedule.

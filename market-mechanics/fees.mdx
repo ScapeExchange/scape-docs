@@ -4,4 +4,30 @@ sidebarTitle: Fees
 description: Fee structure and calculation.
 ---
 
-Document fees here.
+## Base Fees
+
+Scape uses the HIP-3 standard fee schedule:
+
+| Side | Rate |
+| --- | --- |
+| Maker | 0.030% |
+| Taker | 0.090% |
+
+Fees are split **50/50** between the Hyperliquid protocol and the Scape deployer.
+
+Fee tiers are based on rolling volume and assessed in UTC; Hyperliquid staking discounts apply.
+See [Hyperliquid's documentation](https://hyperliquid.gitbook.io/hyperliquid-docs) for the full
+tier schedule and staking discounts.
+
+## Market-Maker Rebates
+
+Scape operates a separate market-maker program that returns a share of the deployer's taker
+fee to qualifying makers, with tiers on rolling 30-day volume and an uptime requirement. Fills
+during off-hours windows earn a rebate multiplier, since that is when price discovery has the
+least reference signal.
+
+<Note>
+  Detailed market-maker tiers, rebate rates, and onboarding terms are covered in Scape's
+  Market Maker Specification and are not part of the public protocol docs. Contact the Scape
+  team for the spec.
+</Note>

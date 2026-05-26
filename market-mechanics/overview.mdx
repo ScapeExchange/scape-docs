@@ -4,4 +4,37 @@ sidebarTitle: Overview
 description: Introduction to Scape's market mechanics.
 ---
 
-Document the market mechanics overview here.
+A perpetual contract ("perp") lets traders speculate on an asset's price with no fixed expiry.
+A funding mechanism keeps the contract price aligned with the underlying. Scape lists three
+perps on Chinese metals: **SHAG** (gold), **SHAU** (silver), and **SHCU** (copper).
+
+Scape perps are quanto contracts. The oracle is quoted in CNY; margin and settlement are in
+USDC. No CNY/USD conversion is applied at any point. P&L is paid in USDC against the change in
+the CNY oracle price.
+
+## What Hyperliquid Handles
+
+Listed on Scape's HIP-3 deployment, matching, order types, funding, liquidations, and
+auto-deleveraging are managed by HyperCore.
+
+## What Scape Handles
+
+Three components are bespoke to Scape: the **oracle price**, the **mark price**, and the
+**external price**. The relayer computes these for each market and broadcasts updates to
+HyperCore. Scape uses [SEDA Protocol](https://seda.xyz) to validate and push updates to
+Hyperliquid every ~3 seconds, with no FX conversion.
+
+## Quanto Payoff
+
+Each market has a fixed multiplier *M*. P&L per contract is that multiplier times the change in
+the CNY oracle price, paid in USDC:
+
+$$
+\text{PnL per contract} = M \times \Delta P_{\text{CNY}}
+$$
+
+No CNY/USD conversion is applied — a trader takes a view on the CNY metal price and is paid in
+dollars on the move.
+
+Per-market multipliers, ticks, leverage, and other contract specifications are listed under
+[Commodities](/assets/commodities).

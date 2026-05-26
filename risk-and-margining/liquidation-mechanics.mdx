@@ -4,4 +4,36 @@ sidebarTitle: Liquidation Mechanics
 description: How liquidations are triggered and executed.
 ---
 
-Document liquidation mechanics here.
+As a HIP-3 market, Scape inherits liquidation from HyperCore. Detailed mechanics are in
+Hyperliquid's documentation on
+[liquidations](https://hyperliquid.gitbook.io/hyperliquid-docs/trading/liquidations) and
+[auto-deleveraging](https://hyperliquid.gitbook.io/hyperliquid-docs/trading/auto-deleveraging).
+
+## How Liquidations Work
+
+A liquidation occurs when a trader's account equity falls below the
+[maintenance margin](/risk-and-margining/margin-modes). The position is then closed via market
+order; partial fills depend on available liquidity.
+
+Liquidations use the **mark price** — Scape positions use the Scape relayer
+[mark price](/market-mechanics/mark-price), which is the median of the oracle, the basis-adjusted
+oracle, and the order-book median.
+
+Because Scape markets are [isolated only](/risk-and-margining/margin-modes), a liquidation is
+confined to the affected position and does not draw on collateral held against other markets.
+
+## Computing Liquidation Price
+
+The estimated liquidation price shown at entry may differ from the actual price as liquidity
+shifts. The formula is:
+
+$$
+\text{liq price} = \text{price} - \text{side} \times \frac{\text{margin available}}{\text{position size}} \times \frac{1}{1 - l \cdot \text{side}}
+$$
+
+where `l = 1 / maintenance_leverage` and `side` is +1 for longs, −1 for shorts.
+
+## Off-Hours
+
+Dislocations that build up while SMM is dark are resolved through
+[funding](/market-mechanics/funding) on reopen rather than through forced liquidations.

@@ -8,7 +8,7 @@
     "light": "#40D1BF",
     "dark": "#00796A"
   },
-  "favicon": "/favicon.ico",
+  "favicon": "/logo/scape-icon.png",
   "icons": {
     "library": "lucide"
   },
@@ -48,7 +48,6 @@
           "market-mechanics/oracle-price",
           "market-mechanics/mark-price",
           "market-mechanics/external-price",
-          "market-mechanics/discovery-bounds",
           "market-mechanics/funding",
           "market-mechanics/fees"
         ]

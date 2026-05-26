@@ -4,4 +4,13 @@ sidebarTitle: External Price
 description: External price feeds and their role.
 ---
 
-Document external price mechanics here.
+The **external price** is a separate value included alongside the oracle and mark prices in
+relayer updates. It is the last externally derived SMM print.
+
+- **When Chinese metals markets are open**, the external price equals the
+  [oracle price](/market-mechanics/oracle-price).
+- **When they are closed**, the external price stays fixed at the last SMM print while the
+  oracle advances via its internal pricing mechanism.
+
+The external price is the anchor that internal pricing references during closures. On reopen,
+the external price updates to the live SMM print and the oracle reverts to it.

@@ -4,4 +4,43 @@ sidebarTitle: Funding
 description: Funding rate mechanics.
 ---
 
-Document funding mechanics here.
+## Overview
+
+Funding keeps the perp aligned with the oracle through periodic peer-to-peer transfers. When
+the perp trades above the oracle, longs pay shorts; when it trades below, shorts pay longs.
+Funding is paid **hourly** on the mark/index spread and settles to each position holder's
+margin balance every hour.
+
+## Technical Details
+
+| Parameter | Value |
+| --- | --- |
+| Interval | Hourly |
+| Cadence | Hyperliquid standard |
+| Cap | ±4% / hour |
+| Impact notional | 1,000 |
+
+The funding rate follows the Hyperliquid formula:
+
+$$
+F = 0.5\,\big[\,P + \text{clamp}(r - P,\, -0.0005,\, 0.0005)\,\big]
+$$
+
+where:
+
+- $P$ = average premium index = `impact_price_difference / oracle_price`
+- $r$ = interest rate
+- `impact_price_difference = max(impact_bid − oracle, 0) − max(oracle − impact_ask, 0)`
+
+The funding payment is:
+
+$$
+\text{payment} = \text{position size} \times \text{oracle price} \times F
+$$
+
+## Off-Hours Funding
+
+When SMM is dark, the oracle holds the last print while the perp continues to trade. Funding
+does the work of closing the gap: as the perp mark drifts from the held anchor, the premium
+widens and funding flows from the rich side to the cheap side. On reopen, any remaining
+dislocation pays through funding rather than through liquidations.

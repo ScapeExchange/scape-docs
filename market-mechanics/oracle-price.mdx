@@ -4,4 +4,39 @@ sidebarTitle: Oracle Price
 description: How Scape sources and uses oracle prices.
 ---
 
-Document oracle price mechanics here.
+The oracle serves two functions:
+
+1. The reference price for funding.
+2. A direct input to the mark price.
+
+Scape extends a metals oracle to operate 24/7, beyond the trading sessions of the Shanghai
+underlying. When Chinese metals markets are open, the oracle follows the external SMM print.
+When they are closed, an internal mechanism takes over.
+
+## External Pricing
+
+The oracle is derived from [Shanghai Metals Market](https://www.metal.com) (SMM) CNY composite
+spot feeds, assessed on a 500ms cadence. [SEDA Protocol](https://seda.xyz) validates and
+pushes the price to Hyperliquid every ~3 seconds. No FX conversion is applied — the oracle is
+CNY-quoted end to end.
+
+While SMM is publishing, the externally derived CNY price is transmitted as the oracle price.
+
+## Internal Pricing
+
+Chinese metals markets close overnight (UTC), on weekends, and on national holidays — gaps of
+up to 10 days. During closure:
+
+- The oracle **holds the last printed SMM value** as its anchor.
+- A continuous-time EMA (CT-EMA) on the perp mid bounds drift from that held anchor.
+
+The Hyperliquid order book drives discovery during the closure. On reopen, SMM resumes and any
+dislocation between the perp and the fresh print pays through [funding](/market-mechanics/funding).
+
+## Safety
+
+| Control | Value |
+| --- | --- |
+| Oracle clamp | 1% max move per update |
+| Hard ceiling | 10× start-of-day |
+| Deployer stake | 500,000 HYPE, slashable on misconduct via stake-weighted validator vote |

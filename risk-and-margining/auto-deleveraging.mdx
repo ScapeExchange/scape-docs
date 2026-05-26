@@ -4,4 +4,33 @@ sidebarTitle: Auto-Deleveraging
 description: How auto-deleveraging (ADL) works on Scape.
 ---
 
-Document auto-deleveraging here.
+Auto-deleveraging (ADL) is the last safeguard in the liquidation waterfall, inherited from
+HyperCore. It activates only when market [liquidations](/risk-and-margining/liquidation-mechanics)
+fail to close an under-collateralized position.
+
+## How ADL Ranks Positions
+
+A composite index decides which profitable traders are deleveraged first:
+
+$$
+\text{sorting index} = \frac{\text{mark price}}{\text{entry price}} \times \frac{\text{notional position}}{\text{account value}}
+$$
+
+Accounts with the highest index — the most profitable and most leveraged on the opposing side —
+are deleveraged first.
+
+## Unwinding
+
+Selected positions are closed at the prevailing mark price against the insolvent side. This
+keeps aggregate system equity constant and prevents bad debt from accumulating.
+
+## Key Characteristics
+
+- **Last resort.** Conservative isolated-margin settings and order-book liquidations minimize
+  ADL frequency.
+- **Mechanical and non-discretionary.** ADL is a transparent rebalancing event when liquidity
+  is exhausted.
+- **Verifiable.** Every event is independently checkable on-chain via HyperCore settlement
+  records.
+- **Why it exists.** Every long matches a short. ADL preserves that zero-sum constraint when
+  normal liquidation fails.
